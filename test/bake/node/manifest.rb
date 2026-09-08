@@ -27,6 +27,9 @@ describe Bake::Node::Manifest do
 		)
 		manifest.write(root)
 		
+		expect(File).to be(:exist?, Pathname.new(root) + ".manifest.json")
+		expect(File).not.to be(:exist?, Pathname.new(root) + ".bake-node.json")
+		
 		loaded = subject.load(root)
 		expect(loaded.import_map).to be == {"imports" => {"example" => "/components/example/example.js"}}
 		expect(loaded.valid_tree?(root)).to be == true

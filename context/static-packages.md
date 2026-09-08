@@ -112,7 +112,7 @@ The default output directory and public URL prefix are configurable:
 }
 ~~~
 
-Static installation writes `.bake-node.json` inside the output directory. The deterministic manifest records:
+Static installation writes `.manifest.json` inside the output directory. This hidden file describes the generated projection independently of the tool which created it. The deterministic manifest records:
 
 - Package versions and selected source directories.
 - Every installed file and its SHA-256 digest.
