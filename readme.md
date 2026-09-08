@@ -26,6 +26,10 @@ Please see the [project documentation](https://socketry.github.io/web-packages/)
 
 Please see the [project releases](https://socketry.github.io/web-packages/releases/index) for all releases.
 
+### v0.2.0
+
+  - [Web Packages](https://socketry.github.io/web-packages/releases/index#web-packages)
+
 ### v0.1.0
 
   - [Projection Manifest](https://socketry.github.io/web-packages/releases/index#projection-manifest)
