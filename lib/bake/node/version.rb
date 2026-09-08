@@ -7,6 +7,6 @@
 module Bake
 	# @namespace
 	module Node
-		VERSION = "0.0.0"
+		VERSION = "0.0.1"
 	end
 end

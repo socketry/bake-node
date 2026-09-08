@@ -1,0 +1,24 @@
+# Automatically generated context index for Utopia::Project guides.
+# Do not edit then files in this directory directly, instead edit the guides and then run `bake utopia:project:agent:context:update`.
+---
+description: Integrate Node.js packages into Bake projects.
+metadata:
+  bug_tracker_uri: https://github.com/socketry/bake-node/issues
+  changelog_uri: https://github.com/socketry/bake-node/blob/main/releases.md
+  documentation_uri: https://socketry.github.io/bake-node/
+  funding_uri: https://github.com/sponsors/ioquatix/
+  source_code_uri: https://github.com/socketry/bake-node.git
+files:
+- path: getting-started.md
+  title: Getting Started
+  description: This guide explains how to use `bake-node` to install an external JavaScript
+    dependency and expose it as static assets from a Ruby project.
+- path: internal-packages.md
+  title: Internal Packages
+  description: This guide explains how to organize JavaScript developed inside a Ruby
+    project as independent workspace packages while using Bake Node for testing and
+    static deployment.
+- path: static-packages.md
+  title: Static Packages
+  description: This guide explains how to control which installed package files are
+    deployed, generate browser import maps and verify the resulting static projection.
