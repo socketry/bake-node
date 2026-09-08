@@ -11,11 +11,7 @@ require_relative "node/package_manager"
 require_relative "node/manifest"
 require_relative "node/static"
 require_relative "node/controller"
-
-
-# @namespace
 module Bake
-	# @namespace
 	module Node
 	end
 end
