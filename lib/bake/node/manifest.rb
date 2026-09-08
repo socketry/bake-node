@@ -13,7 +13,7 @@ module Bake
 	module Node
 		# Records the content and import mappings of a static package projection.
 		class Manifest
-			FILENAME = ".bake-node.json"
+			FILENAME = ".manifest.json"
 			
 			# Build a deterministic manifest.
 			# @parameter base [String] The public URL prefix for static packages.
