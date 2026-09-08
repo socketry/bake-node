@@ -9,8 +9,8 @@ require "pathname"
 
 require_relative "errors"
 
-module Bake
-	module Node
+module Web
+	module Packages
 		# Records the content and import mappings of a static package projection.
 		class Manifest
 			FILENAME = ".manifest.json"

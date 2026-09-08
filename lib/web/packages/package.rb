@@ -7,8 +7,8 @@ require "pathname"
 
 require_relative "errors"
 
-module Bake
-	module Node
+module Web
+	module Packages
 		# Describes how one installed Node.js package is exposed as static files.
 		class Package
 			NAME_PATTERN = /\A(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+\z/i

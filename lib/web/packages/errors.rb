@@ -3,9 +3,9 @@
 # Released under the MIT License.
 # Copyright, 2026, by Samuel Williams.
 
-module Bake
-	module Node
-		# The base class for Bake Node failures.
+module Web
+	module Packages
+		# The base class for Web Packages failures.
 		class Error < StandardError
 		end
 		

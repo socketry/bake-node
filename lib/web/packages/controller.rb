@@ -8,10 +8,10 @@ require "json"
 require_relative "configuration"
 require_relative "manifest"
 require_relative "package_manager"
-require_relative "static"
+require_relative "projection"
 
-module Bake
-	module Node
+module Web
+	module Packages
 		# Coordinates package-manager commands and static package deployment for a project.
 		class Controller
 			# Initialize a controller for a project.
@@ -38,11 +38,11 @@ module Bake
 				package_manager.run(script)
 			end
 			
-			# Materialize the configured packages as static files.
+			# Update the static projection of the configured packages.
 			# @parameter output [String | Nil] An optional project-relative output directory.
 			# @returns [Manifest] The generated static package manifest.
-			def static(output: nil)
-				Static.new(@configuration, output: output).update
+			def update(output: nil)
+				Projection.new(@configuration, output: output).update
 			end
 			
 			# Verify that the static package projection is current.
@@ -50,7 +50,7 @@ module Bake
 			# @returns [Boolean] `true` when the static package projection is current.
 			# @raises [CheckError] If the static package projection is missing or out of date.
 			def check(output: nil)
-				Static.new(@configuration, output: output).check!
+				Projection.new(@configuration, output: output).check!
 			end
 			
 			# Generate an import map from the static package manifest.

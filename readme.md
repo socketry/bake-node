@@ -1,8 +1,8 @@
-# Bake Node
+# Web Packages
 
-Bake Node integrates Node.js packages into Ruby projects using [Bake](https://github.com/ioquatix/bake). It delegates installation and scripts to npm-compatible package managers, then materializes selected packages as deterministic static assets.
+Web Packages integrates Node.js packages into Ruby projects using [Bake](https://github.com/ioquatix/bake). It delegates installation and scripts to npm-compatible package managers, then materializes selected packages as deterministic static assets.
 
-[![Development Status](https://github.com/socketry/bake-node/workflows/Test/badge.svg)](https://github.com/socketry/bake-node/actions?workflow=Test)
+[![Development Status](https://github.com/socketry/web-packages/workflows/Test/badge.svg)](https://github.com/socketry/web-packages/actions?workflow=Test)
 
 ## Features
 
@@ -14,25 +14,25 @@ Bake Node integrates Node.js packages into Ruby projects using [Bake](https://gi
 
 ## Usage
 
-Please see the [project documentation](https://socketry.github.io/bake-node/) for more details.
+Please see the [project documentation](https://socketry.github.io/web-packages/) for more details.
 
-  - [Getting Started](https://socketry.github.io/bake-node/guides/getting-started/index) - This guide explains how to use `bake-node` to install an external JavaScript dependency and expose it as static assets from a Ruby project.
+  - [Getting Started](https://socketry.github.io/web-packages/guides/getting-started/index) - This guide explains how to use `web-packages` to install an external JavaScript dependency and expose it as static assets from a Ruby project.
 
-  - [Internal Packages](https://socketry.github.io/bake-node/guides/internal-packages/index) - This guide explains how to organize JavaScript developed inside a Ruby project as independent workspace packages while using Bake Node for testing and static deployment.
+  - [Internal Packages](https://socketry.github.io/web-packages/guides/internal-packages/index) - This guide explains how to organize JavaScript developed inside a Ruby project as independent workspace packages while using Web Packages for testing and static deployment.
 
-  - [Static Packages](https://socketry.github.io/bake-node/guides/static-packages/index) - This guide explains how to control which installed package files are deployed, generate browser import maps and verify the resulting static projection.
+  - [Static Packages](https://socketry.github.io/web-packages/guides/static-packages/index) - This guide explains how to control which installed package files are deployed, generate browser import maps and verify the resulting static projection.
 
 ## Releases
 
-Please see the [project releases](https://socketry.github.io/bake-node/releases/index) for all releases.
+Please see the [project releases](https://socketry.github.io/web-packages/releases/index) for all releases.
 
 ### v0.1.0
 
-  - [Projection Manifest](https://socketry.github.io/bake-node/releases/index#projection-manifest)
+  - [Projection Manifest](https://socketry.github.io/web-packages/releases/index#projection-manifest)
 
 ### v0.0.1
 
-  - [Added](https://socketry.github.io/bake-node/releases/index#added)
+  - [Added](https://socketry.github.io/web-packages/releases/index#added)
 
 ## Contributing
 

@@ -6,9 +6,9 @@
 require "json"
 require "sus/fixtures/temporary_directory_context"
 
-require "bake/node/manifest"
+require "web/packages/manifest"
 
-describe Bake::Node::Manifest do
+describe Web::Packages::Manifest do
 	include Sus::Fixtures::TemporaryDirectoryContext
 	
 	it "writes, loads and validates a static tree" do
@@ -56,11 +56,11 @@ describe Bake::Node::Manifest do
 	it "reports missing and invalid manifests" do
 		expect do
 			subject.load(root)
-		end.to raise_exception(Bake::Node::CheckError, message: be =~ /does not exist/)
+		end.to raise_exception(Web::Packages::CheckError, message: be =~ /does not exist/)
 		
 		Pathname.new(root).join(subject::FILENAME).write("{")
 		expect do
 			subject.load(root)
-		end.to raise_exception(Bake::Node::CheckError, message: be =~ /Could not parse/)
+		end.to raise_exception(Web::Packages::CheckError, message: be =~ /Could not parse/)
 	end
 end

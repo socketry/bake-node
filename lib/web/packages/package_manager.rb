@@ -5,8 +5,8 @@
 
 require_relative "errors"
 
-module Bake
-	module Node
+module Web
+	module Packages
 		# Detects and invokes npm-compatible package managers without replacing them.
 		class PackageManager
 			LOCK_FILES = {
