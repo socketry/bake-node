@@ -7,6 +7,6 @@ require "bake/node"
 
 describe Bake::Node do
 	it "has an initial version" do
-		expect(Bake::Node::VERSION).to be == "0.0.0"
+		expect(Bake::Node::VERSION).to be == "0.0.1"
 	end
 end
