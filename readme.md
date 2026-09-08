@@ -26,6 +26,10 @@ Please see the [project documentation](https://socketry.github.io/bake-node/) fo
 
 Please see the [project releases](https://socketry.github.io/bake-node/releases/index) for all releases.
 
+### v0.1.0
+
+  - [Projection Manifest](https://socketry.github.io/bake-node/releases/index#projection-manifest)
+
 ### v0.0.1
 
   - [Added](https://socketry.github.io/bake-node/releases/index#added)

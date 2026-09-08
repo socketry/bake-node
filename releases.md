@@ -1,6 +1,6 @@
 # Releases
 
-## Unreleased
+## v0.1.0
 
 ### Projection Manifest
 
