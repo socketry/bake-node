@@ -6,15 +6,15 @@
 require "json"
 require "sus/fixtures/temporary_directory_context"
 
-require "bake/node/configuration"
-require "bake/node/package_manager"
+require "web/packages/configuration"
+require "web/packages/package_manager"
 
-describe Bake::Node::PackageManager do
+describe Web::Packages::PackageManager do
 	include Sus::Fixtures::TemporaryDirectoryContext
 	
 	def configuration(package_json = {})
 		File.write(File.join(root, "package.json"), JSON.generate(package_json))
-		Bake::Node::Configuration.load(root)
+		Web::Packages::Configuration.load(root)
 	end
 	
 	it "uses the packageManager declaration" do
@@ -50,17 +50,17 @@ describe Bake::Node::PackageManager do
 		
 		expect do
 			subject.detect(configuration, environment: {})
-		end.to raise_exception(Bake::Node::ConfigurationError, message: be =~ /Multiple package manager/)
+		end.to raise_exception(Web::Packages::ConfigurationError, message: be =~ /Multiple package manager/)
 	end
 	
 	it "rejects invalid package manager declarations" do
 		expect do
 			subject.detect(configuration("packageManager" => true), environment: {})
-		end.to raise_exception(Bake::Node::ConfigurationError, message: be =~ /must be a string/)
+		end.to raise_exception(Web::Packages::ConfigurationError, message: be =~ /must be a string/)
 		
 		expect do
 			subject.new(root, "other")
-		end.to raise_exception(Bake::Node::ConfigurationError, message: be =~ /Unsupported/)
+		end.to raise_exception(Web::Packages::ConfigurationError, message: be =~ /Unsupported/)
 	end
 	
 	it "runs package manager commands" do
@@ -93,6 +93,6 @@ describe Bake::Node::PackageManager do
 		
 		expect do
 			manager.run("test")
-		end.to raise_exception(Bake::Node::Error, message: be =~ /Command failed/)
+		end.to raise_exception(Web::Packages::Error, message: be =~ /Command failed/)
 	end
 end

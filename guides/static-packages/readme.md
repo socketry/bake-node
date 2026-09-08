@@ -4,7 +4,7 @@ This guide explains how to control which installed package files are deployed, g
 
 ## Package Selection
 
-All direct `dependencies` from the root `package.json` are selected by default. Use `bake-node.packages` to refine that selection:
+All direct `dependencies` from the root `package.json` are selected by default. Use `web-packages.packages` to refine that selection:
 
 ~~~ json
 {
@@ -12,7 +12,7 @@ All direct `dependencies` from the root `package.json` are selected by default. 
     "morphdom": "^2.7",
     "server-only-package": "^1.0"
   },
-  "bake-node": {
+  "web-packages": {
     "packages": {
       "morphdom": {
         "include": ["morphdom-esm.js"]
@@ -28,13 +28,13 @@ Set a dependency to `false` to exclude it. Use `true` or an empty object to acce
 
 ## Source Directories
 
-Many packages publish browser-ready files in `dist/`. Bake Node uses `dist` automatically when that directory exists and otherwise uses the package root.
+Many packages publish browser-ready files in `dist/`. Web Packages uses `dist` automatically when that directory exists and otherwise uses the package root.
 
 Override the source when a package has another layout:
 
 ~~~ json
 {
-  "bake-node": {
+  "web-packages": {
     "packages": {
       "example": {
         "source": "browser"
@@ -52,7 +52,7 @@ npm packages frequently contain far more than an application needs at runtime. `
 
 ~~~ json
 {
-  "bake-node": {
+  "web-packages": {
     "packages": {
       "mermaid": {
         "source": "dist",
@@ -74,7 +74,7 @@ Map browser import specifiers to selected package files:
 
 ~~~ json
 {
-  "bake-node": {
+  "web-packages": {
     "base": "/_components/",
     "packages": {
       "mermaid": {
@@ -94,8 +94,8 @@ Relative import targets must refer to files included in the static projection. A
 Generate and inspect the import map with:
 
 ~~~ bash
-$ bundle exec bake node:packages:static
-$ bundle exec bake node:importmap:show
+$ bundle exec bake web:packages:update
+$ bundle exec bake web:packages:import_map:show
 ~~~
 
 ## Output and Manifest
@@ -104,7 +104,7 @@ The default output directory and public URL prefix are configurable:
 
 ~~~ json
 {
-  "bake-node": {
+  "web-packages": {
     "output": "public/_components",
     "base": "/_components/",
     "packageRoot": "node_modules"
@@ -128,7 +128,7 @@ The entire output tree is staged and swapped atomically. A missing file, invalid
 Use the check task in deployment or CI when generated files are expected to be current:
 
 ~~~ bash
-$ bundle exec bake node:packages:check
+$ bundle exec bake web:packages:check
 ~~~
 
 The check rebuilds the desired manifest in a temporary directory and verifies both the manifest and current file contents.

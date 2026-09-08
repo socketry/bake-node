@@ -12,13 +12,13 @@ require "tmpdir"
 require_relative "errors"
 require_relative "manifest"
 
-module Bake
-	module Node
+module Web
+	module Packages
 		# Builds and validates deterministic static projections of installed packages.
-		class Static
+		class Projection
 			EXCLUDED_COMPONENTS = [".git", "node_modules"].freeze
 			
-			# Initialize a static package builder.
+			# Initialize a web package projection.
 			# @parameter configuration [Configuration] The project configuration.
 			# @parameter output [String | Nil] An optional project-relative output directory.
 			def initialize(configuration, output: nil)
@@ -38,7 +38,7 @@ module Bake
 			def update
 				FileUtils.mkdir_p(@output.dirname)
 				
-				Dir.mktmpdir(".bake-node-", @output.dirname.to_s) do |temporary_root|
+				Dir.mktmpdir(".web-packages-", @output.dirname.to_s) do |temporary_root|
 					temporary_root = Pathname.new(temporary_root)
 					staging = temporary_root + "static"
 					backup = temporary_root + "backup"
@@ -56,7 +56,7 @@ module Bake
 			def check
 				installed = Manifest.load(@output)
 				
-				Dir.mktmpdir("bake-node-check-") do |temporary_root|
+				Dir.mktmpdir("web-packages-check-") do |temporary_root|
 					desired = build(Pathname.new(temporary_root) + "static")
 					
 					return installed.data == desired.data && installed.valid_tree?(@output)
@@ -68,7 +68,7 @@ module Bake
 			# @raises [CheckError] If the projection is missing or out of date.
 			def check!
 				unless check
-					raise CheckError, "Static Node.js packages are out of date. Run `bake node:packages:static`."
+					raise CheckError, "The web package projection is out of date. Run `bake web:packages:update`."
 				end
 				
 				true

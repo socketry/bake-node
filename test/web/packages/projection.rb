@@ -7,10 +7,10 @@ require "fileutils"
 require "json"
 require "sus/fixtures/temporary_directory_context"
 
-require "bake/node/configuration"
-require "bake/node/static"
+require "web/packages/configuration"
+require "web/packages/projection"
 
-describe Bake::Node::Static do
+describe Web::Packages::Projection do
 	include Sus::Fixtures::TemporaryDirectoryContext
 	
 	def write(path, content)
@@ -22,10 +22,10 @@ describe Bake::Node::Static do
 	def configuration(packages)
 		write("package.json", JSON.generate(
 			"dependencies" => packages.keys.to_h{|name| [name, "*"]},
-			"bake-node" => {"packages" => packages},
+			"web-packages" => {"packages" => packages},
 		))
 		
-		Bake::Node::Configuration.load(root)
+		Web::Packages::Configuration.load(root)
 	end
 	
 	it "materializes selected package files and an import map" do
@@ -33,20 +33,20 @@ describe Bake::Node::Static do
 		write("node_modules/@socketry/live/Live.js", "export class Live {}")
 		write("node_modules/@socketry/live/test/Live.js", "unused")
 		
-		static = subject.new(configuration(
+		projection = subject.new(configuration(
 			"@socketry/live" => {
 				"include" => ["Live.js"],
 				"imports" => {"live" => "Live.js"},
 			},
 		))
-		manifest = static.update
+		manifest = projection.update
 		
 		expect(File.read(File.join(root, "public/_components/@socketry/live/Live.js"))).to be == "export class Live {}"
 		expect(File).not.to be(:exist?, File.join(root, "public/_components/@socketry/live/test/Live.js"))
 		expect(manifest.import_map).to be == {
 			"imports" => {"live" => "/_components/@socketry/live/Live.js"},
 		}
-		expect(static.check).to be == true
+		expect(projection.check).to be == true
 	end
 	
 	it "supports explicit distribution roots and removes stale packages" do
@@ -81,37 +81,37 @@ describe Bake::Node::Static do
 		write("node_modules/example/example.js", "example")
 		write("public/_components/existing.js", "existing")
 		
-		static = subject.new(configuration(
+		projection = subject.new(configuration(
 			"example" => {"include" => ["missing.js"]},
 		))
 		
 		expect do
-			static.update
-		end.to raise_exception(Bake::Node::PackageError)
+			projection.update
+		end.to raise_exception(Web::Packages::PackageError)
 		expect(File.read(File.join(root, "public/_components/existing.js"))).to be == "existing"
 	end
 	
-	it "detects modified static output" do
+	it "detects modified projection output" do
 		write("node_modules/example/package.json", "{}")
 		write("node_modules/example/example.js", "example")
 		
-		static = subject.new(configuration("example" => {"include" => ["example.js"]}))
-		static.update
+		projection = subject.new(configuration("example" => {"include" => ["example.js"]}))
+		projection.update
 		write("public/_components/example/example.js", "modified")
 		
-		expect(static.check).to be == false
+		expect(projection.check).to be == false
 	end
 	
-	it "raises when static output is out of date" do
+	it "raises when projection output is out of date" do
 		write("node_modules/example/example.js", "example")
-		static = subject.new(configuration("example" => {"include" => ["example.js"]}))
-		static.update
-		expect(static.check!).to be == true
+		projection = subject.new(configuration("example" => {"include" => ["example.js"]}))
+		projection.update
+		expect(projection.check!).to be == true
 		
 		write("public/_components/example/example.js", "modified")
 		expect do
-			static.check!
-		end.to raise_exception(Bake::Node::CheckError, message: be =~ /out of date/)
+			projection.check!
+		end.to raise_exception(Web::Packages::CheckError, message: be =~ /out of date/)
 	end
 	
 	it "copies complete packages while excluding nested installations" do
@@ -133,10 +133,10 @@ describe Bake::Node::Static do
 		write("node_modules/one/one.js", "one")
 		write("node_modules/two/two.js", "two")
 		
-		static = subject.new(configuration(
+		projection = subject.new(configuration(
 			"one" => {"include" => ["one.js"], "imports" => {"cdn" => "https://example.com/module.js"}},
 		))
-		expect(static.update.import_map).to be == {"imports" => {"cdn" => "https://example.com/module.js"}}
+		expect(projection.update.import_map).to be == {"imports" => {"cdn" => "https://example.com/module.js"}}
 		
 		duplicate = subject.new(configuration(
 			"one" => {"include" => ["one.js"], "imports" => {"example" => "one.js"}},
@@ -144,34 +144,34 @@ describe Bake::Node::Static do
 		))
 		expect do
 			duplicate.update
-		end.to raise_exception(Bake::Node::ConfigurationError, message: be =~ /configured more than once/)
+		end.to raise_exception(Web::Packages::ConfigurationError, message: be =~ /configured more than once/)
 	end
 	
 	it "reports missing packages, sources, files and imports" do
 		expect do
 			subject.new(configuration("missing" => true)).update
-		end.to raise_exception(Bake::Node::PackageError, message: be =~ /was not found/)
+		end.to raise_exception(Web::Packages::PackageError, message: be =~ /was not found/)
 		
 		write("node_modules/example/package.json", "{}")
 		write("node_modules/example/file.js", "file")
 		
 		expect do
 			subject.new(configuration("example" => {"source" => "missing"})).update
-		end.to raise_exception(Bake::Node::PackageError, message: be =~ /does not exist/)
+		end.to raise_exception(Web::Packages::PackageError, message: be =~ /does not exist/)
 		
 		expect do
 			subject.new(configuration("example" => {"source" => "file.js"})).update
-		end.to raise_exception(Bake::Node::PackageError, message: be =~ /Package source does not exist/)
+		end.to raise_exception(Web::Packages::PackageError, message: be =~ /Package source does not exist/)
 		
 		expect do
 			subject.new(configuration("example" => {"include" => ["absent.js"]})).update
-		end.to raise_exception(Bake::Node::PackageError, message: be =~ /No files matched/)
+		end.to raise_exception(Web::Packages::PackageError, message: be =~ /No files matched/)
 		
 		expect do
 			subject.new(configuration(
 				"example" => {"include" => ["file.js"], "imports" => {"missing" => "missing.js"}},
 			)).update
-		end.to raise_exception(Bake::Node::PackageError, message: be =~ /was not installed/)
+		end.to raise_exception(Web::Packages::PackageError, message: be =~ /was not installed/)
 	end
 	
 	it "reports invalid installed package metadata" do
@@ -180,18 +180,18 @@ describe Bake::Node::Static do
 		
 		expect do
 			subject.new(configuration("example" => {"include" => ["example.js"]})).update
-		end.to raise_exception(Bake::Node::PackageError, message: be =~ /Could not parse/)
+		end.to raise_exception(Web::Packages::PackageError, message: be =~ /Could not parse/)
 	end
 	
 	it "restores output when replacement fails" do
 		write("package.json", "{}")
 		write("public/_components/existing.js", "existing")
 		
-		static = subject.new(Bake::Node::Configuration.load(root))
+		projection = subject.new(Web::Packages::Configuration.load(root))
 		temporary_root = Pathname.new(Dir.mktmpdir)
 		
 		expect do
-			static.send(:replace, temporary_root + "missing", temporary_root + "backup")
+			projection.send(:replace, temporary_root + "missing", temporary_root + "backup")
 		end.to raise_exception(Errno::ENOENT)
 		
 		expect(File.read(File.join(root, "public/_components/existing.js"))).to be == "existing"
@@ -202,10 +202,10 @@ describe Bake::Node::Static do
 		write("node_modules/example/package.json", "{}")
 		File.symlink(File.join(root, "outside.js"), File.join(root, "node_modules/example/escape.js"))
 		
-		static = subject.new(configuration("example" => {"include" => ["escape.js"]}))
+		projection = subject.new(configuration("example" => {"include" => ["escape.js"]}))
 		
 		expect do
-			static.update
-		end.to raise_exception(Bake::Node::PackageError, message: be =~ /escapes/)
+			projection.update
+		end.to raise_exception(Web::Packages::PackageError, message: be =~ /escapes/)
 	end
 end

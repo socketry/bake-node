@@ -6,9 +6,9 @@
 require "json"
 require "sus/fixtures/temporary_directory_context"
 
-require "bake/node/controller"
+require "web/packages/controller"
 
-describe Bake::Node::Controller do
+describe Web::Packages::Controller do
 	include Sus::Fixtures::TemporaryDirectoryContext
 	
 	def write(path, content)
@@ -20,7 +20,7 @@ describe Bake::Node::Controller do
 	it "materializes, checks and describes configured packages" do
 		write("package.json", JSON.generate(
 			"dependencies" => {"example" => "*"},
-			"bake-node" => {
+			"web-packages" => {
 				"packages" => {
 					"example" => {"include" => ["example.js"], "imports" => {"example" => "example.js"}},
 				},
@@ -30,7 +30,7 @@ describe Bake::Node::Controller do
 		write("node_modules/example/example.js", "example")
 		
 		controller = subject.new(root)
-		controller.static
+		controller.update
 		expect(controller.check).to be == true
 		expect(JSON.parse(controller.import_map)).to be == {
 			"imports" => {"example" => "/_components/example/example.js"},

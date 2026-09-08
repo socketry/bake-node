@@ -1,23 +1,23 @@
 # Automatically generated context index for Utopia::Project guides.
 # Do not edit then files in this directory directly, instead edit the guides and then run `bake utopia:project:agent:context:update`.
 ---
-description: Integrate Node.js packages into Bake projects.
+description: Integrate JavaScript packages into Ruby web applications.
 metadata:
-  bug_tracker_uri: https://github.com/socketry/bake-node/issues
-  changelog_uri: https://github.com/socketry/bake-node/blob/main/releases.md
-  documentation_uri: https://socketry.github.io/bake-node/
+  bug_tracker_uri: https://github.com/socketry/web-packages/issues
+  changelog_uri: https://github.com/socketry/web-packages/blob/main/releases.md
+  documentation_uri: https://socketry.github.io/web-packages/
   funding_uri: https://github.com/sponsors/ioquatix/
-  source_code_uri: https://github.com/socketry/bake-node.git
+  source_code_uri: https://github.com/socketry/web-packages.git
 files:
 - path: getting-started.md
   title: Getting Started
-  description: This guide explains how to use `bake-node` to install an external JavaScript
-    dependency and expose it as static assets from a Ruby project.
+  description: This guide explains how to use `web-packages` to install an external
+    JavaScript dependency and expose it as static assets from a Ruby project.
 - path: internal-packages.md
   title: Internal Packages
   description: This guide explains how to organize JavaScript developed inside a Ruby
-    project as independent workspace packages while using Bake Node for testing and
-    static deployment.
+    project as independent workspace packages while using Web Packages for testing
+    and static deployment.
 - path: static-packages.md
   title: Static Packages
   description: This guide explains how to control which installed package files are

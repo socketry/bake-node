@@ -4,9 +4,9 @@
 # Copyright, 2026, by Samuel Williams.
 
 # @namespace
-module Bake
+module Web
 	# @namespace
-	module Node
+	module Packages
 		VERSION = "0.1.0"
 	end
 end

@@ -1,18 +1,18 @@
 # Internal Packages
 
-This guide explains how to organize JavaScript developed inside a Ruby project as independent workspace packages while using Bake Node for testing and static deployment.
+This guide explains how to organize JavaScript developed inside a Ruby project as independent workspace packages while using Web Packages for testing and static deployment.
 
 ## Why Use Workspace Packages?
 
 Internal JavaScript often has its own module boundaries, tests and release concerns. Mixing it into the Ruby `lib/` hierarchy makes both languages harder to navigate, while placing authored code directly in `node_modules` makes it disposable.
 
-Bake Node recommends three distinct layers:
+Web Packages recommends three distinct layers:
 
 ~~~ text
 components/                 # Authored internal JavaScript packages.
 node_modules/               # Disposable package-manager projection.
 public/_components/         # Generated static deployment projection.
-package.json                # Workspace and Bake Node configuration.
+package.json                # Workspace and Web Packages configuration.
 ~~~
 
 `components/` describes the role of the code without requiring a second language-level hierarchy. A single directory can contain one or many packages.
@@ -54,7 +54,7 @@ Expose internal packages through the root workspace configuration:
 {
   "private": true,
   "workspaces": ["components/*"],
-  "bake-node": {
+  "web-packages": {
     "packages": {
       "@example/live": {
         "include": ["Live.js"],
@@ -67,13 +67,13 @@ Expose internal packages through the root workspace configuration:
 }
 ~~~
 
-The package manager projects the workspace package into `node_modules/@example/live`, usually using a link. Bake Node resolves that link, ensures selected files remain inside the package, and copies the resulting files into `public/_components/@example/live`.
+The package manager projects the workspace package into `node_modules/@example/live`, usually using a link. Web Packages resolves that link, ensures selected files remain inside the package, and copies the resulting files into `public/_components/@example/live`.
 
 The `components/` path is a convention rather than a requirement. Any workspace or local-package layout supported by the selected package manager can be used.
 
 ## Test Internal Packages
 
-Each package can keep its own test command. Define a root script which invokes the workspace tests according to the selected package manager, then let Bake Node run that script:
+Each package can keep its own test command. Define a root script which invokes the workspace tests according to the selected package manager, then let Web Packages run that script:
 
 ~~~ json
 {
@@ -84,10 +84,10 @@ Each package can keep its own test command. Define a root script which invokes t
 ~~~
 
 ~~~ bash
-$ bundle exec bake node:test
+$ bundle exec bake web:packages:test
 ~~~
 
-pnpm, Yarn and Bun have their own workspace script syntax. Bake Node deliberately does not abstract those differences; the root script remains the project's explicit test entry point.
+pnpm, Yarn and Bun have their own workspace script syntax. Web Packages deliberately does not abstract those differences; the root script remains the project's explicit test entry point.
 
 ## Multiple Internal Libraries
 
@@ -103,7 +103,7 @@ components/
     package.json
 ~~~
 
-Packages used only for development do not need to appear in `bake-node.packages`. Packages listed there can be deployed even when they are not direct root dependencies.
+Packages used only for development do not need to appear in `web-packages.packages`. Packages listed there can be deployed even when they are not direct root dependencies.
 
 ## Avoid Authoring in `node_modules`
 

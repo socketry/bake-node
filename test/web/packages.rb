@@ -3,10 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2026, by Samuel Williams.
 
-require "bake/node"
+require "web/packages"
 
-describe Bake::Node do
+describe Web::Packages do
 	it "has an initial version" do
-		expect(Bake::Node::VERSION).to be == "0.0.1"
+		expect(Web::Packages::VERSION).to be == "0.1.0"
 	end
 end

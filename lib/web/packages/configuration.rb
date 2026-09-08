@@ -9,9 +9,9 @@ require "pathname"
 require_relative "errors"
 require_relative "package"
 
-module Bake
-	module Node
-		# Loads and validates Bake Node settings from a project's `package.json` file.
+module Web
+	module Packages
+		# Loads and validates Web Packages settings from a project's `package.json` file.
 		class Configuration
 			DEFAULT_OUTPUT = "public/_components"
 			DEFAULT_BASE = "/_components/"
@@ -46,10 +46,10 @@ module Bake
 					raise ConfigurationError, "package.json must contain an object!"
 				end
 				
-				configuration = @package_json.fetch("bake-node", {})
+				configuration = @package_json.fetch("web-packages", {})
 				
 				unless configuration.is_a?(Hash)
-					raise ConfigurationError, "bake-node configuration must be an object!"
+					raise ConfigurationError, "web-packages configuration must be an object!"
 				end
 				
 				@package_root = expand_within_root(configuration.fetch("packageRoot", "node_modules"), "packageRoot")
@@ -58,7 +58,7 @@ module Bake
 				@packages = load_packages(configuration["packages"])
 				
 				unless @base.is_a?(String) && @base.end_with?("/")
-					raise ConfigurationError, "bake-node base must be a string ending in '/'!"
+					raise ConfigurationError, "web-packages base must be a string ending in '/'!"
 				end
 				
 				output_path
@@ -115,7 +115,7 @@ module Bake
 						end
 					end
 				else
-					raise ConfigurationError, "bake-node packages must be an array or object!"
+					raise ConfigurationError, "web-packages packages must be an array or object!"
 				end
 				
 				configured.sort.to_h do |name, options|
@@ -125,14 +125,14 @@ module Bake
 			
 			def expand_within_root(path, description, allow_root: true)
 				unless path.is_a?(String) && !path.empty?
-					raise ConfigurationError, "bake-node #{description} must be a non-empty string!"
+					raise ConfigurationError, "web-packages #{description} must be a non-empty string!"
 				end
 				
 				expanded = (@root + path).expand_path
 				prefix = @root.to_s + File::SEPARATOR
 				
 				unless expanded.to_s.start_with?(prefix) || (allow_root && expanded == @root)
-					raise ConfigurationError, "bake-node #{description} must remain within #{@root}!"
+					raise ConfigurationError, "web-packages #{description} must remain within #{@root}!"
 				end
 				
 				expanded
