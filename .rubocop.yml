@@ -5,6 +5,8 @@ plugins:
 AllCops:
   DisabledByDefault: true
 
+# Socketry specific rules:
+
 Layout/ConsistentBlankLineIndentation:
   Enabled: true
 
@@ -13,6 +15,8 @@ Layout/BlockDelimiterSpacing:
 
 Style/GlobalExceptionVariables:
   Enabled: true
+
+# General Layout rules:
 
 Layout/IndentationStyle:
   Enabled: true
@@ -38,6 +42,7 @@ Layout/EndAlignment:
 
 Layout/BeginEndAlignment:
   Enabled: true
+  EnforcedStyleAlignWith: start_of_line
 
 Layout/RescueEnsureAlignment:
   Enabled: true
@@ -66,7 +71,7 @@ Layout/EmptyLinesAroundModuleBody:
   Enabled: true
 
 Layout/EmptyLineAfterMagicComment:
-  Enabled: true
+   Enabled: true
 
 Layout/SpaceInsideBlockBraces:
   Enabled: true

@@ -9,9 +9,14 @@ require_relative "errors"
 
 module Bake
 	module Node
+		# Describes how one installed Node.js package is exposed as static files.
 		class Package
 			NAME_PATTERN = /\A(?:@[a-z0-9._-]+\/)?[a-z0-9._-]+\z/i
 			
+			# Initialize a package selection.
+			# @parameter name [String] The npm package name, including an optional scope.
+			# @parameter options [Hash] The package's source, include patterns and import mappings.
+			# @raises [ConfigurationError] If the package name or options are invalid.
 			def initialize(name, options = {})
 				unless name.is_a?(String) && NAME_PATTERN.match?(name)
 					raise ConfigurationError, "Invalid package name: #{name.inspect}!"
@@ -29,9 +34,16 @@ module Bake
 				validate
 			end
 			
+			# @attribute [String] The npm package name.
 			attr :name
+			
+			# @attribute [String | Nil] The configured package-relative source directory.
 			attr :source
+			
+			# @attribute [Array(String) | Nil] The package-relative file patterns to include.
 			attr :include_patterns
+			
+			# @attribute [Hash(String, String)] The import specifiers exposed by the package.
 			attr :imports
 			
 			private

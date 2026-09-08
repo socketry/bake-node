@@ -3,7 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2026, by Samuel Williams.
 
+
+# @namespace
 module Bake
+	# @namespace
 	module Node
 		VERSION = "0.0.0"
 	end

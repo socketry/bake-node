@@ -11,9 +11,15 @@ require_relative "errors"
 
 module Bake
 	module Node
+		# Records the content and import mappings of a static package projection.
 		class Manifest
 			FILENAME = ".bake-node.json"
 			
+			# Build a deterministic manifest.
+			# @parameter base [String] The public URL prefix for static packages.
+			# @parameter imports [Hash(String, String)] The import-map entries.
+			# @parameter packages [Hash(String, Hash)] The installed package metadata.
+			# @returns [Manifest] The generated manifest.
 			def self.build(base:, imports:, packages:)
 				data = {
 					"format" => 1,
@@ -26,6 +32,10 @@ module Bake
 				new(data)
 			end
 			
+			# Load a manifest from a static output directory.
+			# @parameter root [String | Pathname] The static output directory.
+			# @returns [Manifest] The loaded manifest.
+			# @raises [CheckError] If the manifest is missing or malformed.
 			def self.load(root)
 				path = Pathname.new(root) + FILENAME
 				new(JSON.parse(path.read))
@@ -35,21 +45,32 @@ module Bake
 				raise CheckError, "Could not parse #{path}: #{error.message}"
 			end
 			
+			# Initialize a manifest with its serialized data.
+			# @parameter data [Hash] The manifest data.
 			def initialize(data)
 				@data = data
 			end
 			
+			# @attribute [Hash] The serialized manifest data.
 			attr :data
 			
+			# Write the manifest into a static output directory.
+			# @parameter root [String | Pathname] The static output directory.
+			# @returns [Integer] The number of bytes written.
 			def write(root)
 				path = Pathname.new(root) + FILENAME
 				path.write(JSON.pretty_generate(@data) + "\n")
 			end
 			
+			# Extract the browser import map.
+			# @returns [Hash] An import-map object containing the configured imports.
 			def import_map
 				{"imports" => @data.fetch("imports", {})}
 			end
 			
+			# Check whether every manifested file exists with the expected content.
+			# @parameter root [String | Pathname] The static output directory.
+			# @returns [Boolean] Whether the directory exactly matches the manifest.
 			def valid_tree?(root)
 				root = Pathname.new(root)
 				expected = []

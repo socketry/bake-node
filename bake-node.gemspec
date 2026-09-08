@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 		"source_code_uri" => "https://github.com/socketry/bake-node.git",
 	}
 	
-	spec.files = Dir["{bake,lib}/**/*", "*.md", base: __dir__]
+	spec.files = Dir["{bake,guides,lib}/**/*", "*.md", base: __dir__]
 	
 	spec.required_ruby_version = ">= 3.3"
 	

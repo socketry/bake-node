@@ -14,17 +14,27 @@ require_relative "manifest"
 
 module Bake
 	module Node
+		# Builds and validates deterministic static projections of installed packages.
 		class Static
 			EXCLUDED_COMPONENTS = [".git", "node_modules"].freeze
 			
+			# Initialize a static package builder.
+			# @parameter configuration [Configuration] The project configuration.
+			# @parameter output [String | Nil] An optional project-relative output directory.
 			def initialize(configuration, output: nil)
 				@configuration = configuration
 				@output = configuration.output_path(output)
 			end
 			
+			# @attribute [Configuration] The project configuration.
 			attr :configuration
+			
+			# @attribute [Pathname] The static output directory.
 			attr :output
 			
+			# Build and atomically replace the static package projection.
+			# @returns [Manifest] The generated manifest.
+			# @raises [PackageError] If an installed package cannot be materialized safely.
 			def update
 				FileUtils.mkdir_p(@output.dirname)
 				
@@ -40,6 +50,9 @@ module Bake
 				Manifest.load(@output)
 			end
 			
+			# Check whether the static package projection is current.
+			# @returns [Boolean] Whether the installed projection matches the desired output.
+			# @raises [CheckError] If the current manifest is missing or malformed.
 			def check
 				installed = Manifest.load(@output)
 				
@@ -50,6 +63,9 @@ module Bake
 				end
 			end
 			
+			# Require the static package projection to be current.
+			# @returns [Boolean] `true` when the projection is current.
+			# @raises [CheckError] If the projection is missing or out of date.
 			def check!
 				unless check
 					raise CheckError, "Static Node.js packages are out of date. Run `bake node:packages:static`."
